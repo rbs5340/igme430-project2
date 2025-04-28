@@ -8,10 +8,7 @@ const makerPage = async (req, res) => {
 };
 
 const makeMoney = async (req, res) => {
-  console.log(JSON.stringify(req.body));
-  /* if (req.body.moneys.length > 0) {
-    return false;
-  } */
+  console.log(`makeMoney: ${JSON.stringify(req.body)}`);
 
   const moneyDate = {
     owner: req.session.account._id,
@@ -46,8 +43,11 @@ const getMoneys = async (req, res) => {
 
 const modMoney = async (req, res) => {
   const user = mongoose.Types.ObjectId.createFromHexString(req.session.account._id);
+  if (req.body.moneys.length === 0) {
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
   const money = req.body.moneys[0];
-  // console.log(money);
+  console.log(`modMoney: ${JSON.stringify(req.body)}`);
   // console.log(`User: ${user}`);
   try {
     await Money.updateMany(

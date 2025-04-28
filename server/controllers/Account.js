@@ -1,4 +1,5 @@
 const models = require('../models');
+// const { makeMoney } = require('./Money');
 
 const { Account } = models;
 
@@ -46,6 +47,19 @@ const signup = async (req, res) => {
     const newAccount = new Account({ username, password: hash });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
+    // await makeMoney(req,res);
+    /* const moneyObj = {
+      owner: req.session.account._id,
+    }; */
+    const newMoney = new models.Money({ owner: req.session.account._id });
+    await newMoney.save();
+    /* return res.status(201).json({
+      points: newMoney.points,
+      clickValue: newMoney.clickValue,
+      growthValue: newMoney.growthValue,
+      premium: newMoney.premium,
+    }); */
+
     return res.json({ redirect: '/maker' });
   } catch (err) {
     console.log(err);

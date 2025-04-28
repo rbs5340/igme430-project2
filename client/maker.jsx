@@ -51,8 +51,9 @@ const DomoForm=(props)=>{
 
 const MoneyList = (props) => {
     const [moneys,setMoneys]=useState(props.moneys);
-    console.log("TEST");
-    console.log("Moneys: "+JSON.stringify(moneys));
+    debugger
+    //console.log("TEST");
+    //console.log("MoneyList Moneys: "+JSON.stringify(moneys));
     useEffect(()=>{
         const loadMoneysFromServer = async () => {
             const response = await fetch('/getMoneys');
@@ -63,11 +64,9 @@ const MoneyList = (props) => {
     }, [props.reloadMoneys]);
 
     const handleMoneyInc = async () =>{
-        console.log("test hello hi");
-        for(let i=0;i<moneys.length;i++){
-            moneys[i].clickValue++;
-            moneys[i].points+=moneys[i].clickValue;
-        }
+        //console.log("test hello hi");
+        moneys[0].clickValue++;
+        moneys[0].points+=moneys[0].clickValue;
         setMoneys([...moneys]);
         const response = await fetch('/set', {
             method: "POST",
@@ -81,9 +80,7 @@ const MoneyList = (props) => {
     };
 
     const growInc = async () =>{
-        for(let i=0;i<moneys.length;i++){
-            moneys[i].growthValue++;
-        }
+        moneys[0].growthValue++;
         setMoneys([...moneys]);
         const response = await fetch('/set', {
             method: "POST",
@@ -96,23 +93,32 @@ const MoneyList = (props) => {
         return false;
     }
 
-    const handleMoneyMaker = async () =>{
-        //setMoneys([...moneys]);
-        const response = await fetch('/maker',{
-            method: "POST",
-            headers: {
-                'Content-Type': "application/json",
-                'Accept': "application/json"
-            },
-            body: JSON.stringify({moneys}),
+    const moneyGrow = () =>{
+        setMoneys((moneys)=>{
+            console.log(moneys);
+            moneys[0].points+=moneys[0].growthValue;
+            fetch('/set', {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json",
+                    'Accept': "application/json"
+                  },
+                body: JSON.stringify({ moneys }),
+              });
+            return[...moneys];
         });
+        
+        
         return false;
     }
 
-    if(moneys.length === 0){
-        console.log("test????");
-        handleMoneyMaker();
-    }
+    useEffect(() => {
+        let timer = setTimeout(function loop() {
+            moneyGrow();
+            timer=setTimeout(loop,1000);
+        }, 1000);
+        return () => clearTimeout(timer);
+      }, [])
 
     const moneyNodes = moneys.map(money=> {
         return(
@@ -124,7 +130,32 @@ const MoneyList = (props) => {
             
         );
     });
-
+    console.log("MONEYSSSS: "+moneys);
+    if(moneys.length>0){
+        buyGV=(moneys[0].growthValue+1)*10
+        console.log("TRUE!");
+        console.log("GV: "+moneys[0].growthValue);
+        return(
+            <div className="moneyList">
+                <button id="moneyInc"
+                onClick={(e)=>handleMoneyInc()}
+                name="moneyInc"
+                action="/set"
+                method="GET"
+                className="moneyInc"
+                value="Make Money"
+            >Increment Money</button>
+            <button id="moneyInc"
+                onClick={(e)=>growInc()}
+                name="growInc"
+                action="/set"
+                method="GET"
+                className="growInc"
+                value="Make Grow"
+            >Increment Growth - ${buyGV}</button>
+                {moneyNodes}
+            </div>
+    )}
     return(
         <div className="moneyList">
             <button id="moneyInc"
@@ -145,6 +176,7 @@ const MoneyList = (props) => {
         >Increment Growth</button>
             {moneyNodes}
         </div>
+    
     );
 };
 
