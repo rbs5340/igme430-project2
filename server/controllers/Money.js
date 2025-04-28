@@ -8,8 +8,6 @@ const makerPage = async (req, res) => {
 };
 
 const makeMoney = async (req, res) => {
-  console.log(`makeMoney: ${JSON.stringify(req.body)}`);
-
   const moneyDate = {
     owner: req.session.account._id,
   };
@@ -47,8 +45,6 @@ const modMoney = async (req, res) => {
     return res.status(500).json({ error: 'Something went wrong' });
   }
   const money = req.body.moneys[0];
-  console.log(`modMoney: ${JSON.stringify(req.body)}`);
-  // console.log(`User: ${user}`);
   try {
     await Money.updateMany(
       { owner: user },
