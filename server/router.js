@@ -3,7 +3,7 @@ const mid = require('./middleware');
 
 const router = (app) => {
   // console.log("router");
-  app.get('/getDomos', mid.requiresLogin, controllers.Domo.getDomos);
+  app.get('/getMoneys', mid.requiresLogin, controllers.Money.getMoneys);
 
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
@@ -12,12 +12,16 @@ const router = (app) => {
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
-  app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
-  app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
+  app.get('/maker', mid.requiresLogin, controllers.Money.makerPage);
+  app.post('/maker', mid.requiresLogin, controllers.Money.makeMoney);
 
-  app.post('/inc', mid.requiresLogin, controllers.Domo.modDomo);
+  app.post('/set', mid.requiresLogin, controllers.Money.modMoney);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+
+  app.get('*', (req, res) => {
+    res.redirect('/');
+  });
 };
 
 module.exports = router;
