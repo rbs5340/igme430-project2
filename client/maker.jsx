@@ -14,9 +14,11 @@ const MoneyList = (props) => {
         loadMoneysFromServer();
     }, [props.reloadMoneys]);
 
-    const handleMoneyInc = async () =>{
-        moneys[0].clickValue++;
+    const moneyInc = async () =>{
         moneys[0].points+=moneys[0].clickValue;
+        if(moneys[0].premium){
+            moneys[0].points+=moneys[0].clickValue;
+        }
         setMoneys([...moneys]);
         const response = await fetch('/set', {
             method: "POST",
@@ -30,9 +32,15 @@ const MoneyList = (props) => {
     };
 
     const growInc = async () =>{
-        moneys[0].growthValue++;
-        setMoneys([...moneys]);
-        const response = await fetch('/set', {
+        let buyGV=(moneys[0].growthValue+1)*10;
+        if(moneys[0].premium){
+            buyGV=parseInt(buyGV/2);
+        }
+        if(moneys[0].points>=buyGV){
+            moneys[0].points-=buyGV;
+            moneys[0].growthValue++;
+            setMoneys([...moneys]);
+            const response = await fetch('/set', {
             method: "POST",
             headers: {
                 'Content-Type': "application/json",
@@ -40,7 +48,45 @@ const MoneyList = (props) => {
               },
             body: JSON.stringify({ moneys }),
           });
+          return true;
+        }
         return false;
+    }
+
+    const clickInc = async () =>{
+        let buyCV=(moneys[0].clickValue+1)*5;
+        if(moneys[0].premium){
+            buyCV=parseInt(buyCV/2);
+        }
+        if(moneys[0].points>=buyCV){
+            moneys[0].points-=buyCV;
+            moneys[0].clickValue++;
+            setMoneys([...moneys]);
+            const response = await fetch('/set', {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json",
+                    'Accept': "application/json"
+                  },
+                body: JSON.stringify({ moneys }),
+            });
+            return true;
+        }
+        return false;
+    }
+
+    const switchPremium = async () => {
+        moneys[0].premium = !moneys[0].premium;
+        setMoneys([...moneys]);
+            const response = await fetch('/set', {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json",
+                    'Accept': "application/json"
+                  },
+                body: JSON.stringify({ moneys }),
+        });
+        return true;
     }
 
     const moneyGrow = () =>{
@@ -72,57 +118,98 @@ const MoneyList = (props) => {
     const moneyNodes = moneys.map(money=> {
         return(
             <div key={money.id} className="money">
-                <h3 className="moneyName">Grow: {money.growthValue}</h3>
-                <h3 className="moneyAge">Click: {money.clickValue}</h3>
-                <h3 className="moneyPoints">Points: {money.points}</h3>
+                <h3 className="moneyPoints">Dollars: {money.points}</h3>
+                <h3 className="moneyAge">Click Strength: {money.clickValue}</h3>
+                <h3 className="moneyName">Mint Strength: {money.growthValue}</h3>
             </div>
             
         );
     });
     if(moneys.length>0){
-        buyGV=(moneys[0].growthValue+1)*10
-        return(
-            <div className="moneyList">
-                <button id="moneyInc"
-                onClick={(e)=>handleMoneyInc()}
-                name="moneyInc"
-                action="/set"
-                method="GET"
-                className="moneyInc"
-                value="Make Money"
-            >Increment Money</button>
-            <button id="moneyInc"
-                onClick={(e)=>growInc()}
-                name="growInc"
-                action="/set"
-                method="GET"
-                className="growInc"
-                value="Make Grow"
-            >Increment Growth - ${buyGV}</button>
-                {moneyNodes}
-            </div>
-    )}
+        let buyGV=(moneys[0].growthValue+1)*10;
+        let buyCV=(moneys[0].clickValue+1)*5;
+        if(moneys[0].premium){
+            buyGV=parseInt(buyGV/2);
+            buyCV=parseInt(buyCV/2);
+            return(
+                <div className="moneyList">
+                    <button id="moneyInc"
+                    onClick={(e)=>moneyInc()}
+                    name="moneyInc"
+                    action="/set"
+                    method="GET"
+                    className="moneyInc"
+                    value="Make Money"
+                >Click</button>
+                <button id="clickInc"
+                    onClick={(e)=>clickInc()}
+                    name="clickInc"
+                    action="/set"
+                    method="GET"
+                    className="clickInc"
+                    value="Make Click"
+                >Upgrade Click - ${buyCV}</button>
+                <button id="growInc"
+                    onClick={(e)=>growInc()}
+                    name="growInc"
+                    action="/set"
+                    method="GET"
+                    className="growInc"
+                    value="Make Grow"
+                >Upgrade Mint - ${buyGV}</button>
+                <button id="premInc"
+                    onClick={(e)=>switchPremium()}
+                    name="premInc"
+                    action="/set"
+                    method="GET"
+                    className="premInc"
+                    value="Make Prem"
+                >Premium = ON</button>
+                    {moneyNodes}
+                </div>
+        );
+        }else{
+            return(
+                <div className="moneyList">
+                    <button id="moneyInc"
+                    onClick={(e)=>moneyInc()}
+                    name="moneyInc"
+                    action="/set"
+                    method="GET"
+                    className="moneyInc"
+                    value="Make Money"
+                >Click</button>
+                <button id="clickInc"
+                    onClick={(e)=>clickInc()}
+                    name="clickInc"
+                    action="/set"
+                    method="GET"
+                    className="clickInc"
+                    value="Make Click"
+                >Upgrade Click - ${buyCV}</button>
+                <button id="growInc"
+                    onClick={(e)=>growInc()}
+                    name="growInc"
+                    action="/set"
+                    method="GET"
+                    className="growInc"
+                    value="Make Grow"
+                >Upgrade Mint - ${buyGV}</button>
+                <button id="premInc"
+                    onClick={(e)=>switchPremium()}
+                    name="premInc"
+                    action="/set"
+                    method="GET"
+                    className="premInc"
+                    value="Make Prem"
+                >Premium = OFF</button>
+                    {moneyNodes}
+                </div>
+        );
+        }
+        }
     return(
-        <div className="moneyList">
-            <button id="moneyInc"
-            onClick={(e)=>handleMoneyInc()}
-            name="moneyInc"
-            action="/set"
-            method="GET"
-            className="moneyInc"
-            value="Make Money"
-        >Increment Money</button>
-        <button id="moneyInc"
-            onClick={(e)=>growInc()}
-            name="growInc"
-            action="/set"
-            method="GET"
-            className="growInc"
-            value="Make Grow"
-        >Increment Growth</button>
-            {moneyNodes}
-        </div>
-    
+        <div className="moneyList"></div>
     );
 };
 
