@@ -4,6 +4,8 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    font-family: "Lucida Console", "Courier New", monospace;
+    background-color:#c0e4ff;
 }
 
 #logo {
@@ -47,68 +49,33 @@ nav:nth-child(1) {
     background-color: #ffa600;
 }
 
-.makeMoneySubmit {
+.formSubmit, button {
     transition: background-color 0.4s ease;
-    display: inline;
-    width: 90px;
-    background-color: #55acee;
-    border-radius: 2px;
-    color: white;
-    text-decoration: none;
-}
-
-.makeMoneySubmit:link, .makeMoneySubmit:visited, .makeMoneySubmit:hover, .makeMoneySubmit:active {
-    color: white;
-}
-
-.makeMoneySubmit:hover {
-    transition: background-color 0.4s ease;
-    background-color: #338acc;
-}
-
-.mainForm {
-    height: 300px;
-    width: 350px;
-    margin: 0 auto;
-    padding-top: 350px;
-    font-size: 1.2em;
-}
-
-.mainForm h3 {
-    text-align: center;
-}
-
-.mainForm label {
-    display: inline-block;
-    width: 100px;
-    margin-right: 10px;
-    text-align: right;
-    font-size: 1.2em;
-}
-
-.formSubmit {
-    transition: background-color 0.4s ease;
-    display: block;
     text-align: center;
     margin: 0 auto;
+    margin-left: 10px;
     margin-top: 14px;
     font-size: 1.2em;
     width: 100px;
-    background-color: #55acee;
+    background-color: #fffb00;
     border-radius: 2px;
-    border-color: #66acee;
+    border-color: #ffa600;
     padding: 3px 0px;
-    color: white;
+    color: rgb(0, 0, 0);
     text-decoration: none;
 }
 
 .formSubmit:link, .formSubmit:visited, .formSubmit:hover, .formSubmit:active {
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
-.formSubmit:hover {
+.formSubmit:hover, button:hover {
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+    background-color: #ffa600;
+}
+
+#username, #password{
+    padding: 5px;
 }
 
 #user, #pass, #pass2 {
@@ -127,124 +94,29 @@ nav:nth-child(1) {
     display: none;
 }
 
-#moneyMessage {
-    top: 250px;
-    width: 250px;
-    height: 650px;
-    position: absolute;
-    z-index: 200;
-    right: 0px;
-    overflow: hidden;
-}
-
 #moneyMessage h3 {
-    width: 200px;
+    width: 500px;
     position: absolute;
-    top: 0px;
-    left: 20px;
-}
-
-#speech {
-    height: 120px;
-    width: 250px;
-    z-index:300;
+    left: 5px;
+    bottom: 0;
 }
 
 #errorMessage {
     font-size: 1.2em;
     font-weight: bold;
-    color: red;
+    color: black;
     font-style: italic;
 }
 
-#money {
-    z-index: 225;
-    margin-top: -20px;
-    margin-left: 135px;
-    height: 450px;
-    width: 300px;
-    -ms-transform: rotate(330deg);
-    -webkit-transform: rotate(330deg); 
-    transform: rotate(330deg);
+.money{
+    padding-left: 10px;
 }
 
-#moneys {
-    width: 40%;
-    min-width: 400px;
-    border: 2px solid #55acee;
-    border-radius: 4px;
-    margin: 0 auto;
-    margin-top: 100px;
-}
-
-.money {
-    width: 95%;
-    margin: 0 auto;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    border: 2px solid #55acee;
-    border-radius: 4px;
-    background-color: #55acee;
-    padding: 10px;
-    min-height:60px;
-    overflow: hidden;
-}
-
-.money:hover {
-    transition: border-color 0.2s ease-out;
-    border-color: rgba(255,255,255, 0.8);
-    transition: background-color 2.6s ease-out;
-    background-color: #66bfff;
-}
-
-img.domoFace {
-    margin-left: 25px;
-    margin-right: 10px;
-    height: 50px;
-    width: 50px;
-    border-radius: 4px;
-    margin-top:10px;
-    float:left;
-}
-
-h3.emptyMoney {
-    width: 400px;
-    font-size: 1.5em;
-    margin: 0 auto;
+.moneyList{
     text-align: center;
-    margin-top: 18px;
+    padding-top: 30px;
 }
 
-h3.moneyName {
-    float:left;
-    width: 200px;
-    font-weight: bold;
-    padding-left: 65px;
-    font-size: 1.5em;
-}
-
-h3.moneyAge {
-    float:right;
-    text-align: left;
-    width: 100px;
-    font-weight: bold;
-    padding-right: 40px;
-    font-size: 1.5em;
-}
-
-h3.moneyPoints {
-    float:right;
-    text-align: left;
-    width: 100px;
-    font-weight: bold;
-    padding-right: 40px;
-    font-size: 1.5em;
-}
-
-.money:first-child {
-    margin-top: 10px;
-}
-
-.money:last-child {
-    margin-bottom:10px;
+button{
+    height:100px
 }

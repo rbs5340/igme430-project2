@@ -119,8 +119,8 @@ const MoneyList = (props) => {
         return(
             <div key={money.id} className="money">
                 <h3 className="moneyPoints">Dollars: {money.points}</h3>
-                <h3 className="moneyAge">Click Strength: {money.clickValue}</h3>
-                <h3 className="moneyName">Mint Strength: {money.growthValue}</h3>
+                <h3 className="moneyClick">Click Strength: {money.clickValue}</h3>
+                <h3 className="moneyMint">Mint Strength: {money.growthValue}</h3>
             </div>
             
         );
